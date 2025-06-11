@@ -4,7 +4,7 @@ from openpyxl import Workbook
 from datetime import datetime
 from xml.etree import ElementTree as ET
 from S3_handler.S3_reader import read_xml_from_s3  # Import function to read XML from S3
-#from CSV_handler.CSV_reader import read_csv_from_local  # Import function to read JSON from local
+from CSV_handler.CSV_reader import read_csv_from_local  # Import function to read JSON from local
 
 # Define test parameters
 S3_BUCKET = "testlocxml"
@@ -100,11 +100,24 @@ def compare_csv_xml():
     ws["B25"] = order_line.find("Discount").text
     ws["B26"] = order_line.find("Discount").get("percentage")
     
-    order_csv = orders_df[orders_df["OrderID"] == order_checked].iloc[0]
-    order_line_csv = order_lines_df[
+    LOCAL_CSV_FILE_PATH_HEADER = "C:\\Users\\Karthika\\Documents\\Files_for_data_comparison\\order_header_fields.csv"
+    LOCAL_CSV_FILE_PATH_LINE = "C:\\Users\\Karthika\\Documents\\Files_for_data_comparison\\order_line_fields.csv"
+    orders_df, order_lines_df = read_csv_from_local (LOCAL_CSV_FILE_PATH_HEADER,LOCAL_CSV_FILE_PATH_LINE)
+        
+    filtered_order = orders_df[orders_df["OrderID"] == order_checked]
+    if filtered_order.empty:
+        print(f"No matching order found in CSV for OrderID: {order_checked}")
+        return
+    order_csv = filtered_order.iloc[0]
+
+    filtered_line = order_lines_df[
         (order_lines_df["OrderID"] == order_checked) &
         (order_lines_df["LineNumber"] == order_line_checked)
-    ].iloc[0]
+    ]
+    if filtered_line.empty:
+        print(f"No matching order line for OrderID: {order_checked}, LineNumber: {order_line_checked}")
+        return
+    order_line_csv = filtered_line.iloc[0]
 
     # Column C - CSV fields
     ws["C1"] = "CSV File Fields"
