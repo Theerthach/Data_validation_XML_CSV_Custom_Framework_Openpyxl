@@ -104,15 +104,15 @@ def compare_csv_xml():
     LOCAL_CSV_FILE_PATH_LINE = "C:\\Users\\Karthika\\Documents\\Files_for_data_comparison\\order_line_fields.csv"
     orders_df, order_lines_df = read_csv_from_local (LOCAL_CSV_FILE_PATH_HEADER,LOCAL_CSV_FILE_PATH_LINE)
         
-    filtered_order = orders_df[orders_df["OrderID"] == order_checked]
+    filtered_order = orders_df[orders_df["OrderID"] == int(order_checked)]
     if filtered_order.empty:
         print(f"No matching order found in CSV for OrderID: {order_checked}")
         return
     order_csv = filtered_order.iloc[0]
 
     filtered_line = order_lines_df[
-        (order_lines_df["OrderID"] == order_checked) &
-        (order_lines_df["LineNumber"] == order_line_checked)
+        (order_lines_df["OrderID"] == int(order_checked)) &
+        (order_lines_df["LineNumber"] == int(order_line_checked))
     ]
     if filtered_line.empty:
         print(f"No matching order line for OrderID: {order_checked}, LineNumber: {order_line_checked}")
