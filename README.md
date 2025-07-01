@@ -14,3 +14,7 @@ This Python project reads an XML file from an AWS S3 bucket and compares its con
   - Original XML and CSV values
   - Transformed XML values
   - Match/Mismatch status
+ 
+## Sample Output
+![image](https://github.com/user-attachments/assets/7c8a411e-954e-4953-ad00-75f5a1398ef2)
+
