@@ -3,6 +3,7 @@ import csv
 from openpyxl import Workbook
 from datetime import datetime
 from xml.etree import ElementTree as ET
+import re
 from S3_handler.S3_reader import read_xml_from_s3  # Import function to read XML from S3
 from CSV_handler.CSV_reader import read_csv_from_local  # Import function to read JSON from local
 
@@ -16,9 +17,7 @@ def compare_csv_xml():
     
     # Read XML from S3
     xml_root = read_xml_from_s3(S3_BUCKET, XML_FILE_KEY)
-    #csv_header_content = read_csv_from_local(LOCAL_CSV_FILE_PATH_HEADER)  # Read CSV from local
-    #csv_line_content= read_csv_from_local(LOCAL_CSV_FILE_PATH_LINE)  # Read CSV from local
-
+   
     wb=Workbook()
     ws=wb.active
 
@@ -149,8 +148,58 @@ def compare_csv_xml():
 
     wb.save("./Tests/xml_values_line_by_line.xlsx")
     
+     # Column D - XML fields Transformed
+    ws["D1"] = "XML File Fields Transformed"
+    ws["D2"] = int(ws["B2"].value)
+    ws["D3"] = ws["B3"].value.upper() # Convert status to uppercase
+    ws["D4"] = int(ws["B4"].value)
+    ws["D5"] = ws["B5"].value
+    ws["D6"] = ws["B6"].value
+    ws["D7"] = int(re.sub(r"\D", "", ws["B7"].value )) # Remove non-numeric characters from phone
+    date_obj = datetime.strptime(ws["B8"].value, "%Y-%m-%d")
+    ws["D8"] = date_obj.strftime("%d-%m-%Y")
+    ws["D9"] = round(float(ws["B9"].value))
+    ws["D10"] = ws["B10"].value
+    ws["D11"] = ws["B11"].value
+    ws["D12"] = ws["B12"].value
+    ws["D13"] = ws["B13"].value
+    ws["D14"] = ws["B14"].value
+    ws["D15"] = ws["B15"].value
+    ws["D16"] = int(ws["B16"].value)
+    ws["D17"] = ws["B17"].value
+    ws["D18"] = int(ws["B18"].value)
+    ws["D19"] = int(ws["B19"].value)
+    ws["D20"] = ws["B20"].value
+    ws["D21"] = ws["B21"].value
+    ws["D22"] = ws["B22"].value
+    ws["D23"] = round(float(ws["B23"].value))
+    ws["D24"] = ws["B24"].value
+    ws["D25"] = ws["B25"].value
+    ws["D26"] = ws["B26"].value
+    
+       # cpmpare XML and CSV fields
+    for row in range(2, 27):
+        
+        csv_value = ws[f"C{row}"].value
+        transformed_value = ws[f"D{row}"].value
+        
+        if transformed_value == csv_value:
+            ws[f"E{row}"] = "Match"
+        else:
+            ws[f"E{row}"] = "Mismatch"
+        
+
+    wb.save("./Tests/xml_values_line_by_line.xlsx")
+           
+    
 if __name__ == "__main__":
     compare_csv_xml()
+# This code compares the fields from an XML file stored in S3 with those from a CSV file stored locally.
+# It reads the XML and CSV files, extracts relevant fields, and writes them into an Excel
+
+
+
+
 
 
 
