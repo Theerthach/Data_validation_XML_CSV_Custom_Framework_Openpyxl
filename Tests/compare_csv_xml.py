@@ -99,8 +99,8 @@ def compare_csv_xml():
     ws["B25"] = order_line.find("Discount").text
     ws["B26"] = order_line.find("Discount").get("percentage")
     
-    LOCAL_CSV_FILE_PATH_HEADER = "C:\\Users\\Karthika\\Documents\\Files_for_data_comparison\\order_header_fields.csv"
-    LOCAL_CSV_FILE_PATH_LINE = "C:\\Users\\Karthika\\Documents\\Files_for_data_comparison\\order_line_fields.csv"
+    LOCAL_CSV_FILE_PATH_HEADER = "C:\\Users\\Documents\\Files_for_data_comparison\\order_header_fields.csv"
+    LOCAL_CSV_FILE_PATH_LINE = "C:\\Users\\Documents\\Files_for_data_comparison\\order_line_fields.csv"
     orders_df, order_lines_df = read_csv_from_local (LOCAL_CSV_FILE_PATH_HEADER,LOCAL_CSV_FILE_PATH_LINE)
         
     filtered_order = orders_df[orders_df["OrderID"] == int(order_checked)]
